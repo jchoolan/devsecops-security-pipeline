@@ -31,3 +31,22 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  sast:
+    name: SAST - Semgrep
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep SAST
+        run: semgrep scan --config auto app/
