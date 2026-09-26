@@ -1,0 +1,28 @@
+VULN-02 SAST BEFORE/AFTER COMPARISON
+
+Tool: Semgrep
+Configuration: auto
+Target: app/routes/contributions.js
+
+BEFORE REMEDIATION
+Rules run: 200
+Findings: 6
+Blocking findings: 6
+
+AFTER REMEDIATION
+Rules run: 200
+Findings: 0
+Blocking findings: 0
+
+Finding count change:
+6 -> 0
+
+Interpretation:
+The vulnerable implementation passed user-controlled request data into eval(),
+which Semgrep detected as a server-side code injection risk.
+
+The remediation replaced eval() with parseInt(..., 10), preventing the
+submitted contribution values from being interpreted as JavaScript code.
+
+The same controlled test was repeated after remediation to verify that the
+expression was no longer evaluated as JavaScript.
