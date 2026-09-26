@@ -1,0 +1,10 @@
+VULN-01 SAST - AFTER REMEDIATION
+Tool: Semgrep
+Version: 1.178.0
+Configuration: auto
+Target: app/data/user-dao.js
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+Result: Scan completed successfully.

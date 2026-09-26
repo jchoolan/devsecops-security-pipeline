@@ -1,0 +1,17 @@
+VULN-01 SAST - BEFORE REMEDIATION
+Tool: Semgrep
+Version: 1.178.0
+Configuration: auto
+Target: pre-remediation app/data/user-dao.js
+Source revision: parent of remediation commit 1138fb9
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+Result: Scan completed successfully.
+
+Note:
+The Semgrep OSS ruleset used for this scan did not identify the
+plaintext-password-storage vulnerability. The vulnerability was
+independently confirmed through source-code inspection and a controlled
+MongoDB test showing the original test password stored in plaintext.
