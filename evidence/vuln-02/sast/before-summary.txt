@@ -1,0 +1,26 @@
+VULN-02 SAST - BEFORE REMEDIATION
+
+Vulnerability:
+Server-Side JavaScript Injection via eval()
+
+Tool: Semgrep
+Configuration: auto
+Target: app/routes/contributions.js
+
+Rules run: 200
+Targets scanned: 1
+Findings: 6
+Blocking findings: 6
+
+Detected patterns:
+- javascript.browser.security.eval-detected.eval-detected
+- javascript.lang.security.audit.code-string-concat.code-string-concat
+
+Affected lines:
+32 - eval(req.body.preTax)
+33 - eval(req.body.afterTax)
+34 - eval(req.body.roth)
+
+Result:
+Semgrep detected user-controlled HTTP request data flowing into eval(),
+creating a server-side code injection risk.
