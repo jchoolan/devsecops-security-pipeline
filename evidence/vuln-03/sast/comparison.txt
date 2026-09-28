@@ -1,0 +1,46 @@
+VULN-03 SAST BEFORE/AFTER COMPARISON
+
+Vulnerability:
+IDOR / Broken Access Control
+
+Tool:
+Semgrep
+
+Configuration:
+auto
+
+Target:
+app/routes/allocations.js
+
+BEFORE REMEDIATION
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+
+AFTER REMEDIATION
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+
+Finding Count:
+0 -> 0
+
+Interpretation:
+The Semgrep OSS rules used in this test did not detect the IDOR
+vulnerability.
+
+However, manual security testing demonstrated that before remediation,
+an authenticated User 4 could request /allocations/5 and retrieve
+another user's allocation information.
+
+The remediation changed the source of userId from the URL parameter
+(req.params) to the authenticated session (req.session).
+
+The same IDOR test was repeated after remediation to verify that
+manipulating the URL no longer disclosed another user's allocation
+information.
+
+This demonstrates that automated SAST should be combined with manual
+authorization testing and secure code review.
