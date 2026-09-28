@@ -1,0 +1,20 @@
+VULN-03 SAST - AFTER REMEDIATION
+
+Vulnerability: IDOR / Broken Access Control
+Target: app/routes/allocations.js
+Tool: Semgrep
+Configuration: auto
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+Result: Scan completed successfully.
+
+Remediation:
+The application no longer obtains the allocation owner userId from
+req.params. It obtains the authenticated userId from req.session.
+
+Interpretation:
+The Semgrep OSS ruleset reported zero findings after remediation.
+The effectiveness of the authorization fix was independently verified
+by repeating the original IDOR test.

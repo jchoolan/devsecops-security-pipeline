@@ -1,0 +1,17 @@
+VULN-03 SAST - BEFORE REMEDIATION
+
+Vulnerability: IDOR / Broken Access Control
+Target: app/routes/allocations.js
+Tool: Semgrep
+Configuration: auto
+Rules run: 200
+Targets scanned: 1
+Findings: 0
+Blocking findings: 0
+Result: Scan completed successfully.
+
+Interpretation:
+The Semgrep OSS ruleset used in this test did not detect the IDOR.
+The vulnerability was independently demonstrated by authenticating as
+User ID 4 and requesting /allocations/5, which returned another user's
+allocation information.
