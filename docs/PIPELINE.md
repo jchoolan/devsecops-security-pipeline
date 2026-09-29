@@ -7,7 +7,7 @@ Workflow file: `.github/workflows/devsecops.yml`
 | # | Job | Tool | Gate rule | Report |
 |---|---|---|---|---|
 | 1 | Build and Test | npm / grunt | tests must pass | log |
-| 2 | SAST | Semgrep (`p/security-audit`, `p/nodejs`, `p/owasp-top-ten`) | any finding fails | `semgrep-report` artifact (SARIF) |
+| 2 | SAST | Semgrep (`p/security-audit`, `p/nodejs`, `p/owasp-top-ten`) | report-only (findings tracked in the report artifact) | `semgrep-report` artifact (SARIF) |
 | 3 | SCA | `npm audit` | HIGH or CRITICAL fails | `npm-audit-report` artifact (JSON) + job summary table |
 | 4 | Secrets | Gitleaks (full git history) | any leak fails | Gitleaks summary |
 | 5 | Container | Trivy on the built Docker image | fixable HIGH or CRITICAL fails | `trivy-report` (SARIF) and `sbom-cyclonedx` (SBOM) artifacts |
