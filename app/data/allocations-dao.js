@@ -60,24 +60,29 @@ const AllocationsDAO = function(db){
         const searchCriteria = () => {
 
             if (threshold) {
+
                 /*
-                // Fix for A1 - 2 NoSQL Injection - escape the threshold parameter properly
-                // Fix this NoSQL Injection which doesn't sanitze the input parameter 'threshold' and allows attackers
-                // to inject arbitrary javascript code into the NoSQL query:
-                // 1. 0';while(true){}'
-                // 2. 1'; return 1 == '1
-                // Also implement fix in allocations.html for UX.                             
-                const parsedThreshold = parseInt(threshold, 10);
-                
-                if (parsedThreshold >= 0 && parsedThreshold <= 99) {
-                    return {$where: `this.userId == ${parsedUserId} && this.stocks > ${parsedThreshold}`};
+                 * VULN-04 remediation:
+                 * Only allow threshold values containing one or two
+                 * decimal digits. This prevents attacker-controlled
+                 * JavaScript from being inserted into the MongoDB
+                 * $where expression.
+                 */
+                if (!/^\d{1,2}$/.test(threshold)) {
+                    throw "The user supplied threshold was not valid.";
                 }
-                throw `The user supplied threshold: ${parsedThreshold} was not valid.`;
-                */
-                return {
-                    $where: `this.userId == ${parsedUserId} && this.stocks > '${threshold}'`
-                };
+
+                const parsedThreshold = Number(threshold);
+
+                if (parsedThreshold >= 0 && parsedThreshold <= 99) {
+                    return {
+                        $where: `this.userId == ${parsedUserId} && this.stocks > ${parsedThreshold}`
+                    };
+                }
+
+                throw "The user supplied threshold was not valid.";
             }
+
             return {
                 userId: parsedUserId
             };
@@ -90,7 +95,7 @@ const AllocationsDAO = function(db){
             let doneCounter = 0;
             const userAllocations = [];
 
-            allocations.forEach( alloc => {
+            allocations.forEach(alloc => {
                 userDAO.getUserById(alloc.userId, (err, user) => {
                     if (err) return callback(err, null);
 
