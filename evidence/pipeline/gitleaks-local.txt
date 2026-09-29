@@ -1,0 +1,10 @@
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m12:23PM[0m [32mINF[0m [1m376 commits scanned.[0m
+[90m12:23PM[0m [32mINF[0m [1mscanned ~24736584 bytes (24.74 MB) in 19.4s[0m
+[90m12:23PM[0m [33mWRN[0m [1mleaks found: 8[0m

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Blocks commits that contain secrets. Enable once with:
+#   git config core.hooksPath .githooks
+# Needs Docker. If Docker is not running the hook skips with a warning.
+if ! docker info >/dev/null 2>&1; then
+  echo "pre-commit: Docker not running, skipping secret scan"; exit 0
+fi
+docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest protect --staged --source /repo --verbose
+rc=$?
+[ $rc -ne 0 ] && echo "pre-commit: possible secret found - commit blocked."
+exit $rc
