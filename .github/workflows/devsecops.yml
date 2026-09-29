@@ -6,16 +6,17 @@ on:
       - main
       - "security/**"
       - "devsecops/**"
-
   pull_request:
     branches:
       - main
 
 jobs:
+  # ─────────────────────────────────────────────
+  # 1. Build & basic checks
+  # ─────────────────────────────────────────────
   build-and-test:
     name: Build and Test
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,38 +24,40 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "12"
-          cache: ""
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci || npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests (if present)
+        run: npm test --if-present
 
+  # ─────────────────────────────────────────────
+  # 2. SAST – Semgrep
+  # ─────────────────────────────────────────────
   sast:
     name: SAST - Semgrep
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
         with:
-          python-version: "3.12"
+          config: >-
+            p/security-audit
+            p/nodejs
+            p/owasp-top-ten
+          generateSarif: true
 
-      - name: Install Semgrep
-        run: pip install semgrep
-
-      - name: Run Semgrep SAST
-        run: semgrep scan --config auto app/
-
+  # ─────────────────────────────────────────────
+  # 3. Dependency / SCA – npm audit
+  # ─────────────────────────────────────────────
   dependency-scan:
     name: SCA - npm audit
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -62,48 +65,54 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "12"
-          cache: ""
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci || npm install
 
-      - name: Run dependency vulnerability scan
-        run: npm audit --audit-level=critical
+      - name: Run npm audit (fail on high/critical)
+        run: npm audit --audit-level=high
 
+  # ─────────────────────────────────────────────
+  # 4. Secrets scanning – Gitleaks
+  # ─────────────────────────────────────────────
   secret-scan:
     name: Secrets - Gitleaks
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository with full history
+      - name: Checkout repository (full history)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Run Gitleaks secret scan
-        uses: gitleaks/gitleaks-action@v3
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # ─────────────────────────────────────────────
+  # 5. Container scanning – Trivy (BLOCKING GATE)
+  # ─────────────────────────────────────────────
   container-scan:
     name: Container Security - Trivy
-    runs-on: ubuntu-24.04
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build NodeGoat Docker image
-        run: docker build -t nodegoat-devsecops:latest .
+        run: docker build -t nodegoat-devsecops:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "nodegoat-devsecops:latest"
+          image-ref: "nodegoat-devsecops:${{ github.sha }}"
           scan-type: "image"
-          scanners: "vuln"
           severity: "HIGH,CRITICAL"
           format: "table"
-          exit-code: "1"
+          exit-code: "1"          # ← This makes the pipeline FAIL
           ignore-unfixed: true
