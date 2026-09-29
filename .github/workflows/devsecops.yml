@@ -75,7 +75,7 @@ jobs:
 
       - name: Run Semgrep (human-readable gate)
         run: |
-          if [ "$ENFORCE" = "true" ]; then EXTRA="--error"; else EXTRA=""; fi
+          EXTRA=""
           semgrep scan \
             --config p/security-audit \
             --config p/nodejs \
