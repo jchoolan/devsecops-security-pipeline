@@ -1,0 +1,44 @@
+﻿semgrep.exe :                
+At line:1 char:1
++ & "$Scripts\semgrep.exe" scan --config auto "app\data\allocations-dao ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (               :String) [], Re 
+   moteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+               
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé Scan Status Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+  Scanning 1 file tracked by git with 1074 Code rules:
+                                                                            
+                                            
+  Language      Rules   Files          Origin      Rules                    
+                                            
+ ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔöÇÔöÇÔöÇÔöÇ        
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ                   
+                                            
+  js              153       1          Community    1074                    
+                                            
+  <multilang>      47       1                                               
+                                            
+                                                                            
+                                            
+                
+                
+ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
+Ôöé Scan Summary Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
+Ô£à Scan completed successfully.
+ ÔÇó Findings: 0 (0 blocking)
+ ÔÇó Rules run: 200
+ ÔÇó Targets scanned: 1
+ ÔÇó Parsed lines: ~100.0%
+ ÔÇó No ignore information available
+Ran 200 rules on 1 file: 0 findings.
+(need more rules? `semgrep login` for additional free Semgrep Registry 
+rules)
+
+If Semgrep missed a finding, please send us feedback to let us know!
+See https://semgrep.dev/docs/reporting-false-negatives/
