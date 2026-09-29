@@ -70,3 +70,18 @@ jobs:
 
       - name: Run dependency vulnerability scan
         run: npm audit --audit-level=critical
+
+  secret-scan:
+    name: Secrets - Gitleaks
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
