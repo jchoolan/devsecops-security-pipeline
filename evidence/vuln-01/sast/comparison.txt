@@ -1,0 +1,33 @@
+VULN-01 SAST BEFORE/AFTER COMPARISON
+
+Tool: Semgrep 1.178.0
+Configuration: auto
+
+BEFORE REMEDIATION
+Rules run: 200
+Findings: 0
+Blocking findings: 0
+
+AFTER REMEDIATION
+Rules run: 200
+Findings: 0
+Blocking findings: 0
+
+Finding count change:
+0 -> 0
+
+Interpretation:
+The Semgrep OSS rules used in this test did not detect the plaintext
+password storage weakness in either version. The vulnerability was
+instead verified through source-code inspection and controlled database
+testing.
+
+Before remediation, the test account password was directly visible in
+MongoDB.
+
+After remediation, newly registered passwords were stored as bcrypt
+hashes and authentication continued to function.
+
+This demonstrates that SAST is one security control and should be used
+alongside threat modelling, manual verification, testing, and secure
+code review.
