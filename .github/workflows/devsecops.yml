@@ -6,17 +6,17 @@ on:
       - main
       - "security/**"
       - "devsecops/**"
+
   pull_request:
     branches:
       - main
 
 jobs:
-  # ─────────────────────────────────────────────
-  # 1. Build & basic checks
-  # ─────────────────────────────────────────────
+  # 1. Build and basic checks
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,15 +30,14 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Run tests (if present)
+      - name: Run tests
         run: npm test --if-present
 
-  # ─────────────────────────────────────────────
-  # 2. SAST – Semgrep
-  # ─────────────────────────────────────────────
+  # 2. SAST - Semgrep
   sast:
     name: SAST - Semgrep
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,12 +51,11 @@ jobs:
             p/owasp-top-ten
           generateSarif: true
 
-  # ─────────────────────────────────────────────
-  # 3. Dependency / SCA – npm audit
-  # ─────────────────────────────────────────────
+  # 3. Dependency / SCA - npm audit
   dependency-scan:
     name: SCA - npm audit
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -71,17 +69,16 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Run npm audit (fail on high/critical)
+      - name: Run npm audit
         run: npm audit --audit-level=high
 
-  # ─────────────────────────────────────────────
-  # 4. Secrets scanning – Gitleaks
-  # ─────────────────────────────────────────────
+  # 4. Secrets scanning - Gitleaks
   secret-scan:
     name: Secrets - Gitleaks
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository (full history)
+      - name: Checkout repository with full history
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -91,12 +88,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # ─────────────────────────────────────────────
-  # 5. Container scanning – Trivy (BLOCKING GATE)
-  # ─────────────────────────────────────────────
+  # 5. Container scanning - Trivy
   container-scan:
     name: Container Security - Trivy
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -114,5 +110,5 @@ jobs:
           scan-type: "image"
           severity: "HIGH,CRITICAL"
           format: "table"
-          exit-code: "1"          # ← This makes the pipeline FAIL
+          exit-code: "1"
           ignore-unfixed: true
